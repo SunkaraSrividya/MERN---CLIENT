@@ -1,58 +1,71 @@
-import { useState } from "react"
-export default function ToDoList(){
-    const [formData,SubmitFormData] = useState({
-        time:"",
-        note:""
-    })
-    const [TableData,SubmitTable]=useState([])
+import React, { useState } from "react";
 
-    function HandleForm(e){
-        const {name,value} = e.target
-        SubmitFormData({...formData,[name]:value});
-    }
-    function HandleSubmit(){
-        SubmitTable([...TableData,formData]);
-        SubmitFormData({
-            time:"",
-            note:""
-        })
-    }
-    return(
-        <div>
-            <h1>Todo List</h1>
-            <div class="form">
-                <input name="time"
-                type="time"
-                value={formData.time}
-                onChange={HandleForm}
-                />
-                 <input name="note"
-                type="text"
-                value={formData.note}
-                onChange={HandleForm}
-                
-                />
-                <br/>
-                <button onClick={HandleSubmit}>Submit</button>
-                <br/>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Note</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {TableData.map((data,index)=>(
-                        <tr>
-                            <td>{data.time}</td>
-                            <td>{data.note}</td>
-                        </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+export default function TodoList() {
+  const [formData, setFormData] = useState({
+    time: "",
+    note: ""
+  });
+  const [tableData, setTableData] = useState([]);
 
-        </div>
-    )
+  function handleForm(e) {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  }
+
+  function handleSubmit() {
+    setTableData([...tableData, formData]);
+    setFormData({
+      time: "",
+      note: ""
+    });
+  }
+
+  function handleDelete(index) {
+    const updatedData = [...tableData];
+    updatedData.splice(index, 1);
+    setTableData(updatedData);
+  }
+
+  return (
+    <div>
+      <h1>Todo List</h1>
+      <div className="form">
+        <input
+          name="time"
+          type="time"
+          value={formData.time}
+          onChange={handleForm}
+        />
+        <input
+          name="note"
+          type="text"
+          value={formData.note}
+          onChange={handleForm}
+        />
+        <br />
+        <button onClick={handleSubmit}>Submit</button>
+        <br />
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Note</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableData.map((data, index) => (
+              <tr key={index}>
+                <td>{data.time}</td>
+                <td>{data.note}</td>
+                <td>
+                  <button onClick={() => handleDelete(index)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
